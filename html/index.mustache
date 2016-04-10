@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title>Singing Stocks</title>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script>
+	google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawBackgroundColor);
+
+function drawBackgroundColor() {
+      var data = new google.visualization.DataTable();
+      var stockData = "{{&dataset.data}}";
+      var array = stockData.split(",");
+      data.addColumn('date', 'Date');
+      data.addColumn('number', 'Price');
+      for(var i=0; i<array.length;i+=13){
+      	data.addRow([new Date(array[i]),parseFloat(array[i+1])]);
+      }
+      
+
+      var options = {
+        hAxis: {
+          title: 'Time'
+        },
+        vAxis: {
+          title: 'Price'
+        },
+        backgroundColor: '#f1f8e9'
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+	</script>
+</head>
+<body>
+	<form method="post">
+  Stock name: <input type="text" name="stock"><br>
+  <!-- Maybe add date range -->
+  <input type="submit" value="Submit">
+</form>
+{{#dataset}}
+ <div id="chart_div"></div>
+{{/dataset}}
+
+</body>
+</html>
